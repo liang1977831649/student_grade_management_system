@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.studentGrade.mapper.StudentCourseMapper">
+    <update id="updateScoreAndCommentByStudentIdAndCourseNo">
+        update studentcourse
+        set score=#{score},
+            comment=#{comment}
+        where student_id = #{studentId}
+          and course_no = #{courseNo}
+    </update>
+    <update id="updateFeedBack">
+        update studentcourse set feedback=#{feedback} where student_id=#{studentId} and course_no=#{courseNo};
+    </update>
+    <delete id="deleteByCourseNoAndStudentId">
+        delete from studentcourse where course_no=#{courseNo} and student_id=#{id}
+    </delete>
+
+    <select id="selectStudentCoursePersonal" resultType="com.studentGrade.entity.StudentCourse">
+        select studentcourse.*,course.name as course_name from studentcourse ,course
+        where course.no=studentcourse.course_no and student_id=#{id}
+        <if test="courseNo!=null and courseNo!=''">
+            and studentcourse.course_no=#{courseNo}
+        </if>
+    </select>
+    <select id="selectAllStudentCourse" resultType="com.studentGrade.entity.StudentCourse">
+        select studentcourse.*,student.name as studentName,course.name as courseName from studentcourse,student,course
+        <where>
+            <if test="courseNo!=null and courseNo!=''">
+                studentcourse.course_no=#{courseNo}
+            </if>
+            <if test="studentName!=null and studentName!=''">
+                and student.name like concat('%',#{studentName},'%')
+            </if>
+        and studentcourse.student_id=student.id
+        and studentcourse.course_no=course.no
+        </where>
+    </select>
+</mapper>

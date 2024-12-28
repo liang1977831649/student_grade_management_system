@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.studentGrade.mapper.CourseMapper">
+    <insert id="insert">
+        insert into course value (null,#{name},#{no},#{des},#{times},#{teacherId});
+    </insert>
+    <update id="update">
+        update course set name=#{name},no=#{no},des=#{des},times=#{times},teacherId=#{teacherId} where id=#{id};
+    </update>
+    <delete id="delete">
+        delete from  course where id=#{id};
+    </delete>
+
+    <select id="listCourse" resultType="com.studentGrade.entity.Course">
+        select course.*,teacher.name as teacherName from course ,teacher
+        <where>
+            <if test="searchName!=null and searchName!=''">
+                course.name like concat('%',#{searchName},'%')
+            </if>
+            <if test="courseNo!=null and courseNo!=''">
+                and course.courseNo=#{courseNo}
+            </if>
+            <if test="teacherName!=null and teacherName!=''">
+                and teacher.name like concat('%',#{teacherName},'%')
+            </if>
+            and course.teacherId=teacher.Id
+        </where>
+    </select>
+
+
+
+</mapper>

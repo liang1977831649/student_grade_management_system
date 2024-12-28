@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.studentGrade.mapper.StudentMapper">
+
+    <insert id="addStudent">
+        insert into student value (#{id},null,#{password},null,null,null,1);
+    </insert>
+    <insert id="addStudentByManage">
+        insert into student value (#{id},#{name},#{password},#{sex},#{phone},#{birthday},#{avatar},#{role});
+    </insert>
+    <update id="updateStudent">
+        update student set
+        name=#{name},sex=#{sex},phone=#{phone},birthday=#{birthday},avatar=#{avatar}
+        <if test="password!=null and password!=''">
+            ,password=#{password}
+        </if>
+        where id=#{id}
+    </update>
+    <update id="updatePassword">
+        update student set password=#{newPwd} where id=#{id};
+    </update>
+    <delete id="delete">
+        delete from student where id=#{id}
+    </delete>
+    <select id="queryStudentByIdAndName" resultType="com.studentGrade.entity.Student">
+        select * from student
+        <where>
+            <if test="id!=null">
+                id like concat('%',#{id},'%')
+            </if>
+            <if test="name!=null and name!=''">
+                and name like concat('%',#{name},'%')
+            </if>
+        </where>
+    </select>
+
+
+</mapper>
